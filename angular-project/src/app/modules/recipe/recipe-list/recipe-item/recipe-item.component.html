@@ -1,3 +1,7 @@
-<p>
-  recipe-item works!
-</p>
+<div class="float-left">
+  <h4>{{ recipe.name }}</h4>
+  <p>{{ recipe.description }}</p>
+</div>
+<span class="float-right">
+  <img class="img-fluid" [ngStyle]="{height: '70px'}" [src]="recipe.imagePath" [alt]="recipe.name">
+</span>
