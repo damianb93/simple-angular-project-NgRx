@@ -1,7 +1,11 @@
-<div class="float-left">
-  <h4>{{ recipe.name }}</h4>
-  <p>{{ recipe.description }}</p>
-</div>
-<span class="float-right">
+<div class="list-group">
+  <a class="list-group-item list-group-item-action" [ngStyle]="{cursor: 'pointer'}">
+    <div class="float-left">
+      <h4>{{ recipe.name }}</h4>
+      <p>{{ recipe.description }}</p>
+    </div>
+    <span class="float-right">
   <img class="img-fluid" [ngStyle]="{height: '70px'}" [src]="recipe.imagePath" [alt]="recipe.name">
-</span>
+  </span>
+  </a>
+</div>
