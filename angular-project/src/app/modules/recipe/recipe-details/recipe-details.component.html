@@ -1,14 +1,14 @@
 <div class="row">
   <div class="col-sm-12">
     <img class="img-fluid"
-         [src]="selectedRecipe.imagePath"
-         [alt]="selectedRecipe.name"
+         [src]="selectedRecipe?.imagePath"
+         [alt]="selectedRecipe?.name"
          [ngStyle]="{maxHeight: '300px'}">
   </div>
 </div>
 <div class="row">
   <div class="col-sm-12">
-    <h1>{{selectedRecipe.name}}</h1>
+    <h1>{{selectedRecipe?.name}}</h1>
   </div>
 </div>
 <div class="row">
@@ -17,7 +17,7 @@
       <button class="btn btn-outline-primary" id="manageRecipe" ngbDropdownToggle>Manage recipe</button>
       <div ngbDropdownMenu aria-labelledby="manageRecipe">
         <button ngbDropdownItem (click)="addIngredientsToShoppingList()">To shopping list</button>
-        <button ngbDropdownItem>Edit recipe</button>
+        <button ngbDropdownItem [routerLink]="['edit']">Edit recipe</button>
         <button ngbDropdownItem>Delete recipe</button>
       </div>
     </div>
@@ -29,7 +29,7 @@
 <div class="row">
   <div class="col-sm-12">
     <h4>Description:</h4>
-    {{selectedRecipe.description}}
+    {{selectedRecipe?.description}}
   </div>
 </div>
 
@@ -39,7 +39,7 @@
   <div class="col-sm-12">
     <h4>Ingredients:</h4>
     <ul class="list-group">
-      <li class="list-group-item" *ngFor="let ingredient of selectedRecipe.ingredients">
+      <li class="list-group-item" *ngFor="let ingredient of selectedRecipe?.ingredients">
         {{ingredient.name}} ({{ingredient.amount}})
       </li>
     </ul>

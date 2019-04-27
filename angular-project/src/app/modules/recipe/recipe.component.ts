@@ -1,31 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {Recipe} from "./recipe.model";
-import {RecipeService} from "./recipe.service";
-import {takeWhile, tap} from "rxjs/operators";
-import {LifeCycle} from "../../core/models/life.cycle.model";
 
 @Component({
   selector: 'app-recipes',
-  templateUrl: './recipe.component.html',
-  styleUrls: ['./recipe.component.css']
+  templateUrl: './recipe.component.html'
 })
-export class RecipeComponent extends LifeCycle implements OnInit {
+export class RecipeComponent implements OnInit {
 
-  selectedRecipe: Recipe;
 
-  constructor(private recipeService: RecipeService) {
-    super();
-  }
+  constructor() {}
 
-  ngOnInit() {
-    this.onRecipeSelection();
-  }
+  ngOnInit() {}
 
-  private onRecipeSelection() {
-    this.recipeService.recipeSelected
-      .pipe(
-        takeWhile(() => this.alive),
-        tap(recipe => this.selectedRecipe = recipe)
-      ).subscribe();
-  }
 }

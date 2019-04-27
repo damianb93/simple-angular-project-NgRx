@@ -1,11 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {Recipe} from "../recipe.model";
-import {RecipeService} from "../recipe.service";
+import {RecipeService} from "../services/recipe.service";
 
 @Component({
   selector: 'app-recipes-list',
-  templateUrl: './recipe-list.component.html',
-  styleUrls: ['./recipe-list.component.css']
+  templateUrl: './recipe-list.component.html'
 })
 export class RecipeListComponent implements OnInit {
 
@@ -15,9 +14,5 @@ export class RecipeListComponent implements OnInit {
 
   ngOnInit() {
     this.recipes = this.recipeService.getRecipes();
-  }
-
-  onRecipeSelected(recipe: Recipe) {
-    this.recipeService.recipeSelected.emit(recipe);
   }
 }
