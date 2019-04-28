@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Recipe} from "../recipe.model";
 import {RecipeService} from "../services/recipe.service";
-import {ActivatedRoute, Data} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
+import {combineLatest} from "rxjs";
 
 @Component({
   selector: 'app-recipe-details',
@@ -10,18 +11,28 @@ import {ActivatedRoute, Data} from "@angular/router";
 export class RecipeDetailsComponent implements OnInit {
 
   selectedRecipe: Recipe;
+  selectedRecipeId: number;
 
   constructor(private recipeService: RecipeService,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              private router: Router) { }
 
   ngOnInit() {
-    this.route.data
+    combineLatest(this.route.data, this.route.params)
       .subscribe(
-        (data: Data) => this.selectedRecipe = data['recipe']
+        ([data, params]) => {
+          this.selectedRecipe = data['recipe'];
+          this.selectedRecipeId = params['id'];
+        }
       );
   }
 
   addIngredientsToShoppingList() {
     this.recipeService.addIngredientsToShoppingList(this.selectedRecipe.ingredients);
+  }
+
+  deleteRecipe() {
+    this.recipeService.deleteRecipe(this.selectedRecipeId);
+    this.router.navigateByUrl('/recipes');
   }
 }

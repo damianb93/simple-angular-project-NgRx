@@ -1,19 +1,19 @@
 import {Injectable} from "@angular/core";
 import {Ingredient} from "../../core/models/ingredient.model";
-import {Subject} from "rxjs";
+import {BehaviorSubject, Subject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShoppingListService {
 
-  ingredientsChanged = new Subject<Array<Ingredient>>();
-  ingredientEdited =new Subject<number>();
-
   private ingredients: Array<Ingredient> = [
     new Ingredient('Apples', 5),
     new Ingredient('Tomatoes', 10)
   ];
+
+  ingredientEdited =new Subject<number>();
+  ingredientsChanged = new BehaviorSubject<Array<Ingredient>>(this.getIngredients());
 
   getIngredient(index: number): Ingredient {
     return this.ingredients[index];

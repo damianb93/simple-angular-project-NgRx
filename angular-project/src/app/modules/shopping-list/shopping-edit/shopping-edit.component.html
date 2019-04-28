@@ -4,23 +4,28 @@
       <div class="row">
         <div class="col-sm-5 form-group">
           <label for="name">Name</label>
-          <input type="text" id="name" class="form-control" formControlName="name">
+          <input formControlName="name"
+                 type="text" id="name" class="form-control">
         </div>
+
         <div class="col-sm-2 form-group">
           <label for="amount">Amount</label>
-          <input type="number" id="amount" class="form-control" formControlName="amount">
+          <input formControlName="amount"
+                 type="number" id="amount" class="form-control">
         </div>
       </div>
+
       <div class="row">
         <div class="col-sm-12">
           <button class="btn btn-success mx-1" type="submit"
                   [disabled]="shoppingListForm.invalid">
             {{ editMode ? 'Update' : 'Add' }}
           </button>
+
           <button class="btn btn-danger mx-1" type="button"
                   [disabled]="!editMode"
-                  (click)="deleteIngredient()">Delete</button>
-          <button class="btn btn-primary mx-1" type="button" (click)="clearForm()">Clear</button>
+                  (click)="onDeleteIngredient()">Delete</button>
+          <button class="btn btn-primary mx-1" type="button" (click)="onClear()">Clear</button>
         </div>
       </div>
     </form>

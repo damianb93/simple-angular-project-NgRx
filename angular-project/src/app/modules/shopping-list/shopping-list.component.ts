@@ -18,7 +18,6 @@ export class ShoppingListComponent extends LifeCycle implements OnInit {
   }
 
   ngOnInit() {
-    this.ingredients = this.slService.getIngredients();
     this.onIngredientsUpdate();
   }
 

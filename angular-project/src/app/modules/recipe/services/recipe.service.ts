@@ -3,6 +3,7 @@ import {RecipeServicesModule} from "./recipe-services.module";
 import {Recipe} from "../recipe.model";
 import {Ingredient} from "../../../core/models/ingredient.model";
 import {ShoppingListService} from "../../shopping-list/shopping-list.service";
+import {BehaviorSubject} from "rxjs";
 
 @Injectable({
   providedIn: RecipeServicesModule
@@ -28,6 +29,8 @@ export class RecipeService {
       ])
   ];
 
+  recipesChanged = new BehaviorSubject<Array<Recipe>>(this.getRecipes());
+
   constructor(private slService: ShoppingListService) {}
 
   getRecipes(): Array<Recipe> {
@@ -38,4 +41,19 @@ export class RecipeService {
     this.slService.addIngredients(ingredients);
   }
 
+  addRecipe(recipe: Recipe): number {
+    this.recipes.push(recipe);
+    this.recipesChanged.next(this.getRecipes());
+    return this.recipes.length - 1;
+  }
+
+  updateRecipe(index: number, recipe: Recipe) {
+    this.recipes[index] = recipe;
+    this.recipesChanged.next(this.getRecipes());
+  }
+
+  deleteRecipe(index: number) {
+    this.recipes.splice(index, 1);
+    this.recipesChanged.next((this.getRecipes()));
+  }
 }
