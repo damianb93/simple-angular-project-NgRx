@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {RecipeServicesModule} from "./recipe-services.module";
 import {Recipe} from "../recipe.model";
 import {Ingredient} from "../../../core/models/ingredient.model";
-import {ShoppingListService} from "../../../core/services/shopping-list.service";
+import {ShoppingListService} from "../../shopping-list/shopping-list.service";
 
 @Injectable({
   providedIn: RecipeServicesModule

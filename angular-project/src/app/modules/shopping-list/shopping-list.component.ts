@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Ingredient} from "../../core/models/ingredient.model";
-import {ShoppingListService} from "../../core/services/shopping-list.service";
+import {ShoppingListService} from "./shopping-list.service";
 import {takeWhile, tap} from "rxjs/operators";
 import {LifeCycle} from "../../core/models/life.cycle.model";
 
@@ -23,10 +23,14 @@ export class ShoppingListComponent extends LifeCycle implements OnInit {
   }
 
   onIngredientsUpdate() {
-    this.slService.ingredientsUpdate
+    this.slService.ingredientsChanged
       .pipe(
         takeWhile(() => this.alive),
-        tap(() => this.ingredients = this.slService.getIngredients()),
+        tap((updatedIngredients) => this.ingredients = updatedIngredients),
       ).subscribe();
+  }
+
+  onEditItem(index: number) {
+    this.slService.ingredientEdited.next(index);
   }
 }
