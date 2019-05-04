@@ -4,11 +4,13 @@ import {CommonModule} from "@angular/common";
 import {RouterModule} from "@angular/router";
 import {HeaderComponent} from "./header/header.component";
 import {NgbCollapseModule} from '@ng-bootstrap/ng-bootstrap';
+import {HomeComponent} from "./home/home.component";
 
 @NgModule({
   declarations: [
     ContentLayoutComponent,
-    HeaderComponent
+    HeaderComponent,
+    HomeComponent
   ],
   imports: [
     CommonModule,
