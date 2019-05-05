@@ -1,5 +1,6 @@
-import {Routes} from "@angular/router";
-import {HomeComponent} from "../../layout/home/home.component";
+import {Routes} from '@angular/router';
+import {HomeComponent} from '../../layout/home/home.component';
+import {ShoppingListComponent} from '../../modules/shopping-list/shopping-list.component';
 
 export const CONTENT_ROUTES: Routes = [
   {
@@ -13,6 +14,6 @@ export const CONTENT_ROUTES: Routes = [
   },
   {
     path: 'shopping-list',
-    loadChildren: './modules/shopping-list/shopping-list.module#ShoppingListModule'
+    component: ShoppingListComponent
   }
 ];

@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {Ingredient} from "../../../core/models/ingredient.model";
-import {ShoppingListService} from "../shopping-list.service";
-import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {LifeCycle} from "../../../core/models/life.cycle.model";
-import {takeWhile, tap} from "rxjs/operators";
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Ingredient} from '../../../core/models/ingredient.model';
+import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Store} from '@ngrx/store';
+import {AddIngredient, DeleteIngredient, StopEdit, UpdateIngredient} from '../store/shopping-list.actions';
+import {AppState} from '../../../core/store/app.reducers';
 
 @Component({
   selector: 'app-shopping-edit',
@@ -14,30 +14,26 @@ import {takeWhile, tap} from "rxjs/operators";
     }
   `]
 })
-export class ShoppingEditComponent extends LifeCycle implements OnInit {
+export class ShoppingEditComponent implements OnInit, OnDestroy {
 
   shoppingListForm: FormGroup;
   editMode = false;
-  selectedIngredientId: number;
 
-  private editForm$ = this.slService.ingredientEdited
-    .pipe(
-      takeWhile(() => this.alive),
-      tap(index => {
-        this.editMode = true;
-        this.selectedIngredientId = index;
-        this.shoppingListForm.patchValue(this.slService.getIngredient(index));
-      })
-    );
-
-  constructor(private fb: FormBuilder, private slService: ShoppingListService) {
-    super();
+  constructor(private fb: FormBuilder, private store: Store<AppState>) {
   }
 
   ngOnInit() {
     this.initForm();
 
-    this.editForm$.subscribe();
+    this.store.select('shoppingList')
+      .subscribe(data => {
+        if (data.editedIngredientIndex > -1) {
+          this.editMode = true;
+          this.shoppingListForm.patchValue(data.editedIngredient);
+        } else {
+          this.editMode = false;
+        }
+      });
   }
 
   getFCtrl(fCtrlName: string): AbstractControl {
@@ -45,13 +41,16 @@ export class ShoppingEditComponent extends LifeCycle implements OnInit {
   }
 
   onSubmit() {
-    if (!this.shoppingListForm.valid) { return; }
+    if (!this.shoppingListForm.valid) {
+      return;
+    }
 
     const ingredient = new Ingredient(this.getFCtrl('name').value, this.getFCtrl('amount').value);
 
     this.editMode
-      ? this.slService.updateIngredient(this.selectedIngredientId, ingredient)
-      : this.slService.addIngredient(ingredient);
+      ? this.store.dispatch(new UpdateIngredient(ingredient))
+      : this.store.dispatch(new AddIngredient(ingredient));
+
 
     this.onClear();
   }
@@ -63,9 +62,11 @@ export class ShoppingEditComponent extends LifeCycle implements OnInit {
 
   onDeleteIngredient() {
 
-    if (!this.editMode) { return; }
+    if (!this.editMode) {
+      return;
+    }
 
-    this.slService.deleteIngredient(this.selectedIngredientId);
+    this.store.dispatch(new DeleteIngredient());
     this.onClear();
   }
 
@@ -73,6 +74,10 @@ export class ShoppingEditComponent extends LifeCycle implements OnInit {
     this.shoppingListForm = this.fb.group({
       name: ['', [Validators.required]],
       amount: ['', [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/)]]
-    })
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.store.dispatch(new StopEdit());
   }
 }

@@ -1,21 +1,24 @@
 import {Component, OnInit} from '@angular/core';
-import {Recipe} from "../recipe.model";
-import {RecipeService} from "../services/recipe.service";
-import {ActivatedRoute, Router} from "@angular/router";
-import {combineLatest} from "rxjs";
+import {Recipe} from '../recipe.model';
+import {ActivatedRoute, Router} from '@angular/router';
+import {combineLatest} from 'rxjs';
+import {Store} from '@ngrx/store';
+import {AddIngredients} from '../../shopping-list/store/shopping-list.actions';
+import {RecipeFeatureState} from '../store/recipe.reducers';
+import {DeleteRecipe} from '../store/recipe.actions';
 
 @Component({
   selector: 'app-recipe-details',
   templateUrl: './recipe-details.component.html'
 })
 export class RecipeDetailsComponent implements OnInit {
-
   selectedRecipe: Recipe;
   selectedRecipeId: number;
 
-  constructor(private recipeService: RecipeService,
-              private route: ActivatedRoute,
-              private router: Router) { }
+  constructor(private route: ActivatedRoute,
+              private router: Router,
+              private store: Store<RecipeFeatureState>) {
+  }
 
   ngOnInit() {
     combineLatest(this.route.data, this.route.params)
@@ -28,11 +31,11 @@ export class RecipeDetailsComponent implements OnInit {
   }
 
   addIngredientsToShoppingList() {
-    this.recipeService.addIngredientsToShoppingList(this.selectedRecipe.ingredients);
+    this.store.dispatch(new AddIngredients(this.selectedRecipe.ingredients));
   }
 
   deleteRecipe() {
-    this.recipeService.deleteRecipe(this.selectedRecipeId);
+    this.store.dispatch(new DeleteRecipe(this.selectedRecipeId));
     this.router.navigateByUrl('/recipes');
   }
 }

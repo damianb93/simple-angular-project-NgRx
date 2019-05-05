@@ -1,28 +1,20 @@
 import {Component, OnInit} from '@angular/core';
-import {Recipe} from "../recipe.model";
-import {RecipeService} from "../services/recipe.service";
-import {takeWhile, tap} from "rxjs/operators";
-import {LifeCycle} from "../../../core/models/life.cycle.model";
+import {Store} from '@ngrx/store';
+import {RecipeFeatureState, RecipeState} from '../store/recipe.reducers';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-recipes-list',
   templateUrl: './recipe-list.component.html'
 })
-export class RecipeListComponent extends LifeCycle implements OnInit {
+export class RecipeListComponent implements OnInit {
 
-  recipes: Array<Recipe>;
+  recipeState$: Observable<RecipeState>;
 
-  private getRecipes$ = this.recipeService.recipesChanged
-    .pipe(
-      takeWhile(() => this.alive),
-      tap(recipes => this.recipes = recipes)
-    );
-
-  constructor(private recipeService: RecipeService) {
-    super();
+  constructor(private store: Store<RecipeFeatureState>) {
   }
 
   ngOnInit() {
-    this.getRecipes$.subscribe();
+    this.recipeState$ = this.store.select('recipes');
   }
 }

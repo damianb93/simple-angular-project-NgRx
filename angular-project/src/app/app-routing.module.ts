@@ -1,7 +1,7 @@
-import {NgModule} from "@angular/core";
-import {RouterModule, Routes} from "@angular/router";
-import {ContentLayoutComponent} from "./layout/content-layout/content-layout.component";
-import {CONTENT_ROUTES} from "./core/routes/content-layout.routes";
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {ContentLayoutComponent} from './layout/content-layout/content-layout.component';
+import {CONTENT_ROUTES} from './core/routes/content-layout.routes';
 
 const routes: Routes = [
   {

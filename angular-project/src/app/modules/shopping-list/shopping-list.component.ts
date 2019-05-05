@@ -1,35 +1,27 @@
 import {Component, OnInit} from '@angular/core';
-import {Ingredient} from "../../core/models/ingredient.model";
-import {ShoppingListService} from "./shopping-list.service";
-import {takeWhile, tap} from "rxjs/operators";
-import {LifeCycle} from "../../core/models/life.cycle.model";
+import {Store} from '@ngrx/store';
+import {Observable} from 'rxjs';
+import {StartEdit} from './store/shopping-list.actions';
+import {AppState} from '../../core/store/app.reducers';
+import {ShoppingListState} from './store/shopping-list.reducers';
 
 @Component({
   selector: 'app-shopping-list',
   templateUrl: './shopping-list.component.html',
   styleUrls: ['./shopping-list.component.css']
 })
-export class ShoppingListComponent extends LifeCycle implements OnInit {
+export class ShoppingListComponent implements OnInit {
 
-  ingredients: Array<Ingredient>;
+  shoppingListState$: Observable<ShoppingListState>;
 
-  constructor(private slService: ShoppingListService) {
-    super();
+  constructor(private store: Store<AppState>) {
   }
 
   ngOnInit() {
-    this.onIngredientsUpdate();
-  }
-
-  onIngredientsUpdate() {
-    this.slService.ingredientsChanged
-      .pipe(
-        takeWhile(() => this.alive),
-        tap((updatedIngredients) => this.ingredients = updatedIngredients),
-      ).subscribe();
+    this.shoppingListState$ = this.store.select('shoppingList');
   }
 
   onEditItem(index: number) {
-    this.slService.ingredientEdited.next(index);
+    this.store.dispatch(new StartEdit(index));
   }
 }
